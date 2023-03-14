@@ -33,13 +33,13 @@ class Code:
         
         self.buyer = buyer
         
-        self.meal = meal
+        self.meal = meal # ناهار شام
         
-        self.room = room
+        self.room = room # MKL
         
-        self.food = food
+        self.food = food # Persian from Dining
         
-        self.completed = completed
+        self.completed = completed # True False
         
         self.checked = checked
         
@@ -141,88 +141,86 @@ class Seller:
         
         for i in range(1,len(reserves)+1):
             
-            if driver.find_element('xpath' , f'//*[@id="reserve"]/tbody/tr[{i}]/td[12]/input').is_selected() == True:
-                
-                driver.close()
-                
-                return False
+            if driver.find_element('xpath' , f'//*[@id="reserve"]/tbody/tr[{i}]/td[6]').text == self.meal:
             
-            room = driver.find_element('xpath' , f'//*[@id="reserve"]/tbody/tr[{i}]/td[5]').text
+                if driver.find_element('xpath' , f'//*[@id="reserve"]/tbody/tr[{i}]/td[12]/input').is_selected() == False:
             
-            if room == '33-شهید بهشتی-رستوران مکمل دانشجویی':
-                
-                room = 'MKL'
-                
-            elif room == '01-شهید بهشتی-سلف مرکزی برادران':
-                
-                room = 'BMB'
-                
-            elif room == '03-شهید بهشتی : خوابگاه کوی پسران':
-                
-                room = 'BDB'
-                
-            elif room == '05-شهید عباسپور : سلف دانشجویی پسران':
-                
-                room = 'AMB'
-                
-            elif room == '08-شهید عباسپور : خوابگاه کوی پسران':
-                
-                room = 'ADB'
-                
-            elif room == '02-شهید بهشتی-سلف مرکزی خواهران':
-                
-                room = 'BMG'
-                
-            elif room == '04-شهید بهشتی : خوابگاه کوی دختران':
-                
-                room = 'BDG'
-                
-            elif room == '06-شهید عباسپور : سلف دانشجویی دختران':
-                
-                room = 'AMG'
-                
-            elif room == '09-شهید عباسپور : خوابگاه کوی دختران':
-                
-                room = 'ADG'
-                
-            completed = driver.find_element('xpath' , f'//*[@id="reserve"]/tbody/tr[{i}]/td[7]').text
-            
-            if completed.find('نیم پرس'):
-                
-                completed = False
-                
-            else:
-                
-                completed = True
-                
-            food = driver.find_element('xpath' , f'//*[@id="reserve"]/tbody/tr[{i}]/td[8]').text
-            
-            driver.find_element('xpath' , f'//*[@id="print-{i}"]').click()
+                    room = driver.find_element('xpath' , f'//*[@id="reserve"]/tbody/tr[{i}]/td[5]').text
+    
+                    if room == '33-شهید بهشتی-رستوران مکمل دانشجویی':
                     
-            sleep(1)
+                        room = 'MKL'
+    
+                    elif room == '01-شهید بهشتی-سلف مرکزی برادران':
                     
-            codeText = driver.find_element('xpath' , '//*[@id="printResult"]/tr[1]/td').text
+                        room = 'BMB'
+    
+                    elif room == '03-شهید بهشتی : خوابگاه کوی پسران':
                     
-            driver.close()
-            
-            num = int(findall('[0-9]+' , codeText)[0])
-            
-            for c in todayCodes:
-                
-                if c.num == num:
+                        room = 'BDB'
+    
+                    elif room == '05-شهید عباسپور : سلف دانشجویی پسران':
                     
-                    return False
+                        room = 'AMB'
+    
+                    elif room == '08-شهید عباسپور : خوابگاه کوی پسران':
+                    
+                        room = 'ADB'
+    
+                    elif room == '02-شهید بهشتی-سلف مرکزی خواهران':
+                    
+                        room = 'BMG'
+    
+                    elif room == '04-شهید بهشتی : خوابگاه کوی دختران':
+                    
+                        room = 'BDG'
+    
+                    elif room == '06-شهید عباسپور : سلف دانشجویی دختران':
+                    
+                        room = 'AMG'
+    
+                    elif room == '09-شهید عباسپور : خوابگاه کوی دختران':
+                    
+                        room = 'ADG'
+    
+                    completed = driver.find_element('xpath' , f'//*[@id="reserve"]/tbody/tr[{i}]/td[7]').text
+    
+                    if completed.find('نیم پرس'):
+                    
+                        completed = False
+    
+                    else:
+                    
+                        completed = True
+    
+                    food = driver.find_element('xpath' , f'//*[@id="reserve"]/tbody/tr[{i}]/td[8]').text
+    
+                    driver.find_element('xpath' , f'//*[@id="print-{i}"]').click()
+    
+                    sleep(1)
+    
+                    codeText = driver.find_element('xpath' , '//*[@id="printResult"]/tr[1]/td').text
+    
+                    driver.close()
+    
+                    num = int(findall('[0-9]+' , codeText)[0])
+    
+                    for c in todayCodes:
+                    
+                        if c.num == num:
+                        
+                            return False
+    
+                    code = Code(num=num, seller=self, buyer=None, meal=self.meal, room=room, food=food, completed=completed, checked=False, used=False)
+    
+                    self.code = code
+    
+                    self.checked = True
+    
+                    todayCodes.append(code)
+    
+                    return True
             
-            code = Code(num=num, seller=self, buyer=None, meal=self.meal, room=room, food=food, completed=completed, checked=False, used=False)
-            
-            self.code = code
-            
-            self.checked = True
-            
-            todayCodes.append(code)
-            
-            return True
-        
         driver.close()
         
         return False
@@ -264,7 +262,6 @@ class Seller:
         sleep(1)
         
         driver.find_element('id' , 'studentNumberInput').send_keys(self.studentId)
-        
         
         driver.find_element('id' , 'transferAmount').send_keys(cost)
     
@@ -394,9 +391,9 @@ class Buyer:
     
         driver.get('https://dining.sbu.ac.ir/index.rose')
     
-        driver.find_element('id' , 'username').send_keys(400243043)
+        driver.find_element('id' , 'username').send_keys(self.studentId)
     
-        driver.find_element('id' , 'password').send_keys(4610913976)
+        driver.find_element('id' , 'password').send_keys(self.idNumber)
     
         driver.find_element('id' , 'login_btn_submit').click()
     
