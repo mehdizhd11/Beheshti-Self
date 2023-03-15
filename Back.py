@@ -15,9 +15,11 @@ import os
 
 import schedule
 
+import threading
+
 todayCodes = []
 
-PROXY = ''
+PROXY = '37.32.12.86:17280'
 
 chDrURL = '/Users/MeT/Code/Telegram Bot/Beheshti Self/chromedriver'
 
@@ -80,8 +82,6 @@ class Code:
             if driver.find_element('xpath' , f'//*[@id="reserve"]/tbody/tr[{i}]/td[6]').text == self.meal:
                 
                 if driver.find_element('xpath' , f'//*[@id="reserve"]/tbody/tr[{i}]/td[12]/input').is_selected() == True:
-                    
-                    self.checked = False
                     
                     return False
                 
@@ -292,6 +292,10 @@ class Seller:
         os.remove(f'{imgName}.png')
         
         self.payedTo = True
+        
+    def clearList():
+        
+        todayCodes.clear()
         
 class Buyer:
     

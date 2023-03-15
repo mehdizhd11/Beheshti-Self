@@ -1,5 +1,11 @@
-x = []
+from Back import *
 
-for i in range(len(x)):
+food = 'کباب-نیم پرس'
+
+print(food)
+
+if food.find('-نیم پرس'):
     
-    print(True)
+    food = food.replace('-نیم پرس', '')
+    
+    print(food)
