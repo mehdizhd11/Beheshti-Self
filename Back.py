@@ -17,7 +17,7 @@ import schedule
 
 todayCodes = []
 
-PROXY = '37.32.12.86:17280'
+PROXY = '37.32.12.86:27380'
 
 chDrURL = '/Users/MeT/Code/Telegram Bot/Beheshti Self/chromedriver'
 
