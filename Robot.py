@@ -9,7 +9,7 @@ from persiantools import digits
 
 TOKEN = '6254025537:AAGT8c4OYPdzGH5r2Y1y3wged0ENLIvNcc0'
 
-schedule.every().day.at('00:30').do(clearList)
+schedule.every().day.at('00:30').do(Code.clearList)
 
 while True:
     
@@ -25,13 +25,17 @@ while True:
         
         def start_bot(message):
             
+            users_num(message.chat.id)
+            
+            todayUsers_num(message.chat.id)
+            
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True,row_width=2)
             
             item1 = types.KeyboardButton('فروش کد')
             
             item2 = types.KeyboardButton('خرید کد')
             
-            item3 = types.KeyboardButton('اِبآوت رٌبات')
+            item3 = types.KeyboardButton('نحوه عملکرد ربات')
             
             markup.add(item1,item2,item3)
             
@@ -47,7 +51,7 @@ while True:
             
             item2 = types.KeyboardButton('شام')
             
-            markup.add(item1,item2)
+            markup.row(item1,item2)
             
             if message.text == 'فروش کد':
                 
@@ -65,7 +69,19 @@ while True:
                 
                 bot.register_next_step_handler(meal, buyer_meal)
                 
+            elif message.text == 'نحوه عملکرد ربات':
+                
+                about = '--- ربات با گرفتن شماره دانشجویی و کد ملی فروشنده ، به صورت خودکار کد فراموشی غذای رزرو شده را از سایت دریافت کرده و در صورت تایید در لیست کد ها قرار می‌دهد /\n--- پس از درخواست خریدار برای خرید کد ، کد فروشنده مجددا با سایت چک می‌شود و پس از دریافت شماره دانشجویی و کد ملی خریدار ، مبلغ غذا از حساب خریدار برداشته و به حساب فروشنده واریز می‌شود و کد برای خریدار فعال می‌شود /\n--- هزینه خرید کد رستوران مکمل ۱۰ هزار تومان و دریافتی فروش کد رستوران مکمل مبلغ ۶ هزار تومان است /\n--- در باقی سلف ها هزینه خرید و فروش برابر مبلغ غذا است /'
+                
+                bot.send_message(message.chat.id, text=about)
+                
+                bot.send_message(message.chat.id, '/restart')
+                
+                return
+            
             else:
+                
+                bot.send_message(message.chat.id, '/restart')
                 
                 return
                 
@@ -73,17 +89,19 @@ while True:
             
             meal = mealText.text
             
-            if meal != 'ناهار' or meal != 'شام':
+            if meal == 'ناهار' or meal == 'شام':
+            
+                studentId = bot.reply_to(mealText, 'شماره دانشجویی خود را وارد کنید')
+            
+                bot.register_next_step_handler(studentId, seller_studentId , meal)
                 
-                bot.send_message(mealText.chat.id, 'خطا',reply_markup=None)
+            else:
+                
+                bot.send_message(mealText.chat.id, 'خطا')
                 
                 bot.send_message(mealText.chat.id, '/restart')
                 
                 return
-            
-            studentId = bot.reply_to(mealText, 'شماره دانشجویی خود را وارد کنید')
-            
-            bot.register_next_step_handler(studentId, seller_studentId , meal)
                 
         def seller_studentId(studentIdText,*args):
             
@@ -95,7 +113,7 @@ while True:
             
             if studentId.isnumeric() == False:
                 
-                bot.send_message(studentIdText.chat.id, 'شماره دانشجویی اشتباه است',reply_markup=None)
+                bot.send_message(studentIdText.chat.id, 'شماره دانشجویی اشتباه است')
                 
                 bot.send_message(studentIdText.chat.id, '/restart')
                 
@@ -121,7 +139,7 @@ while True:
             
             if idNumber.isnumeric() == False:
                 
-                bot.send_message(idNumberText.chat.id, 'شماره ملی اشتباه است',reply_markup=None)
+                bot.send_message(idNumberText.chat.id, 'شماره ملی اشتباه است')
                 
                 bot.send_message(idNumberText.chat.id, '/restart')
                 
@@ -133,7 +151,7 @@ while True:
             
             if Seller.findCode(seller):
                 
-                bot.send_message(seller.chatId, 'کد شما در لیست فرار گرفت' , reply_markup=None)
+                bot.send_message(seller.chatId, 'کد شما در لیست فرار گرفت')
                 
                 bot.send_message(seller.chatId, 'در صورت فروش ، ربات مبلغ غذا را به حساب شما واریز و به شما اطلاع خواهد داد')
                 
@@ -143,9 +161,9 @@ while True:
             
             else:
                 
-                bot.send_message(idNumberText.chat.id, 'خطا',reply_markup=None)
+                bot.send_message(idNumberText.chat.id, 'خطا')
                 
-                bot.send_message(idNumberText.chat.id, 'اطلاعات ارسال شده و رزرو غذا را بررسی و مجددا تلاش کنید')
+                bot.send_message(idNumberText.chat.id, 'اطلاعات ارسال شده خود و رزرو بودن غذا را بررسی و مجددا تلاش کنید')
                 
                 bot.send_message(idNumberText.chat.id, '/restart')
                 
@@ -155,41 +173,51 @@ while True:
             
             meal = mealText.text
             
-            if meal != 'ناهار' or meal != 'شام':
+            if meal == 'ناهار' or meal == 'شام':
                 
-                bot.send_message(mealText.chat.id, 'خطا',reply_markup=None)
+                markup = types.ReplyKeyboardMarkup(resize_keyboard=True,row_width=5)
+
+                item1 = types.KeyboardButton('بهشتی مرکزی برادران')
+
+                item2 = types.KeyboardButton('بهشتی مرکزی خواهران')
+
+                item3 = types.KeyboardButton('بهشتی کوی پسران')
+
+                item4 = types.KeyboardButton('بهشتی کوی دختران')
+
+                item5 = types.KeyboardButton('عباسپور مرکزی برادران')
+
+                item6 = types.KeyboardButton('عباسپور مرکزی خواهران')
+
+                item7 = types.KeyboardButton('عباسپور کوی پسران')
+
+                item8 = types.KeyboardButton('عباسپور کوی دختران')
+
+                item9 = types.KeyboardButton('رستوران مکمل رانشجویی')
+
+                markup.row(item1,item2)
+                
+                markup.row(item3,item4)
+                
+                markup.row(item5,item6)
+                
+                markup.row(item7,item8)
+                
+                markup.row(item9)
+
+                bot.send_message(mealText.chat.id, 'تایید شد' , reply_markup=markup)
+
+                room = bot.reply_to(mealText, 'سلف مورد نظر را انتخاب کنید')
+
+                bot.register_next_step_handler(room, buyer_room , meal)
+                
+            else:
+                
+                bot.send_message(mealText.chat.id, 'خطا')
                 
                 bot.send_message(mealText.chat.id, '/restart')
                 
                 return
-            
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True,row_width=5)
-            
-            item1 = types.KeyboardButton('بهشتی مرکزی برادران')
-            
-            item2 = types.KeyboardButton('بهشتی مرکزی خواهران')
-            
-            item3 = types.KeyboardButton('بهشتی کوی پسران')
-            
-            item4 = types.KeyboardButton('بهشتی کوی دختران')
-            
-            item5 = types.KeyboardButton('عباسپور مرکزی برادران')
-            
-            item6 = types.KeyboardButton('عباسپور مرکزی خواهران')
-            
-            item7 = types.KeyboardButton('عباسپور کوی پسران')
-            
-            item8 = types.KeyboardButton('عباسپور کوی دختران')
-            
-            item9 = types.KeyboardButton('رستوران مکمل رانشجویی')
-            
-            markup.add(item1,item2,item3,item4,item5,item6,item7,item8,item9)
-            
-            bot.send_message(mealText.chat.id, 'تایید شد' , reply_markup=markup)
-            
-            room = bot.reply_to(mealText, 'سلف مورد نظر را انتخاب کنید')
-            
-            bot.register_next_step_handler(room, buyer_room , meal)
             
         def buyer_room(roomText , *args):
             
@@ -235,7 +263,7 @@ while True:
                 
             else:
                 
-                bot.send_message(roomText.chat.id, 'خطا',reply_markup=None)
+                bot.send_message(roomText.chat.id, 'خطا')
                 
                 bot.send_message(roomText.chat.id, '/restart')
                 
@@ -247,7 +275,7 @@ while True:
             
             if len(enableCodes) < 1:
                 
-                bot.send_message(buyer.chatId, 'در حال حاصر کدی برای این سلف موجود نیست' , reply_markup=None)
+                bot.send_message(buyer.chatId, 'در حال حاصر کدی برای این سلف موجود نیست')
                 
                 bot.send_message(buyer.chatId, '/restart')
                 
@@ -261,11 +289,11 @@ while True:
                     
                     if enableCodes[idx].completed:
                         
-                        markup.add(types.KeyboardButton(f'{enableCodes[idx].food}'))
+                        markup.row(types.KeyboardButton(f'{enableCodes[idx].food}'))
                         
                     else:
                         
-                        markup.add(types.KeyboardButton(f'{enableCodes[idx].food}-نیم پرس'))
+                        markup.row(types.KeyboardButton(f'{enableCodes[idx].food}-نیم پرس'))
             
                 bot.send_message(roomText.chat.id, 'تایید شد' , reply_markup=markup)
                 
@@ -301,7 +329,7 @@ while True:
             
             else:
                 
-                bot.send_message(foodText.chat.id, 'کدی پیدا نشد' , reply_markup=None)
+                bot.send_message(foodText.chat.id, 'کدی پیدا نشد')
                 
                 bot.send_message(foodText.chat.id, '/restart')
                 
@@ -361,7 +389,7 @@ while True:
                 
                 Seller.payment(buyer.code.seller)
                 
-                bot.send_message(buyer.code.seller.chatId , 'کد شما فروخته شد و مبلغ آن به حساب شما واریز شد' , reply_markup=None)
+                bot.send_message(buyer.code.seller.chatId , 'کد شما فروخته شد و مبلغ آن به حساب شما واریز شد')
                 
                 bot.send_message(buyer.code.seller.chatId, '/restart')
                 
@@ -369,12 +397,13 @@ while True:
                 
             else:
                 
-                bot.send_message(idNumberText.chat.id, 'پرداخت ناموفق بود . اطلاعات و موجودی حساب خود را بررسی و مجددا تلاش کنید' ,reply_markup=None)
+                bot.send_message(idNumberText.chat.id, 'پرداخت ناموفق بود . اطلاعات و موجودی حساب خود را بررسی و مجددا تلاش کنید')
                 
                 bot.send_message(idNumberText.chat.id, '/restart')
                 
                 return
-                
+        
+        bot.polling(non_stop=True)  
             
     except:
         

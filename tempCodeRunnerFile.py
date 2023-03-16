@@ -1,2 +1,1 @@
-
-#     t.join()
+disable_markup(mealText)

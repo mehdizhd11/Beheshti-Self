@@ -15,8 +15,6 @@ import os
 
 import schedule
 
-import threading
-
 todayCodes = []
 
 PROXY = '37.32.12.86:17280'
@@ -90,6 +88,12 @@ class Code:
                     self.checked = True
                     
                     return True
+                
+    def clearList():
+        
+        todayCodes.clear()
+        
+        todayUsers.clear()
         
 class Seller:
     
@@ -293,10 +297,6 @@ class Seller:
         
         self.payedTo = True
         
-    def clearList():
-        
-        todayCodes.clear()
-        
 class Buyer:
     
     def __init__(self , code , studentId , idNumber , meal , room , isPayed , chatId):
@@ -377,7 +377,7 @@ class Buyer:
         
         if self.room == 'MKL':
             
-            cost = 80000
+            cost = 100000
             
         elif self.code.completed == False:
             
@@ -472,4 +472,33 @@ class Buyer:
         self.isPayed = True
         
         return True
+    
+Users = []
+
+todayUsers = []
+
+todayReq = 0
+    
+def users_num(chatId):
+    
+    for idx in range(len(Users)):
+        
+        if chatId == Users[idx]:
+            
+            return
+        
+    Users.append(chatId)
+    
+def todayUsers_num(chatId):
+    
+    for idx in range(len(todayUsers)):
+        
+        if chatId == todayUsers[idx]:
+            
+            return
+    
+    todayUsers.append(chatId)
+    
+    print(chatId)
+
     

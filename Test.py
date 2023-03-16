@@ -1,11 +1,7 @@
 from Back import *
 
-food = 'کباب-نیم پرس'
+x = [1,1,1,1,1,]
 
-print(food)
+x.clear()
 
-if food.find('-نیم پرس'):
-    
-    food = food.replace('-نیم پرس', '')
-    
-    print(food)
+print(x)
