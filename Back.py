@@ -25,7 +25,7 @@ pytesseract.tesseract_cmd = r'/opt/homebrew/Cellar/tesseract/5.3.0_1/bin/tessera
 
 class Code:
     
-    def __init__(self,num,seller,buyer,meal,room,food,completed,checked,used):
+    def __init__(self,num,seller,buyer,meal,room,food,completed,thursday,checked,used):
         
         self.num = num
         
@@ -44,6 +44,8 @@ class Code:
         self.checked = checked
         
         self.used = used
+        
+        self.thursday = thursday
         
     def checkCode(self):
         
@@ -188,6 +190,12 @@ class Seller:
                         room = 'ADG'
     
                     completed = driver.find_element('xpath' , f'//*[@id="reserve"]/tbody/tr[{i}]/td[7]').text
+                    
+                    thursday = False
+                    
+                    if completed == 'غذای نوع 4':
+                        
+                        thursday = True
     
                     if completed.find('نیم پرس'):
                     
@@ -215,7 +223,7 @@ class Seller:
                         
                             return False
     
-                    code = Code(num=num, seller=self, buyer=None, meal=self.meal, room=room, food=food, completed=completed, checked=False, used=False)
+                    code = Code(num=num, seller=self, buyer=None, meal=self.meal, room=room, food=food, completed=completed, thursday=thursday , checked=False, used=False)
     
                     self.code = code
     
@@ -233,7 +241,11 @@ class Seller:
         
         cost = 0
         
-        if self.code.room == 'MKL':
+        if self.code.thursday:
+            
+            cost = 200000
+        
+        elif self.code.room == 'MKL':
             
             cost = 60000
             
@@ -375,7 +387,11 @@ class Buyer:
         
         cost = 0
         
-        if self.room == 'MKL':
+        if self.code.thursday:
+            
+            cost = 200000
+        
+        elif self.room == 'MKL':
             
             cost = 100000
             
@@ -500,5 +516,3 @@ def todayUsers_num(chatId):
     todayUsers.append(chatId)
     
     print(chatId)
-
-    
