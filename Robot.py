@@ -25,10 +25,6 @@ while True:
         
         def start_bot(message):
             
-            users_num(message.chat.id)
-            
-            todayUsers_num(message.chat.id)
-            
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True,row_width=2)
             
             item1 = types.KeyboardButton('فروش کد')
@@ -71,7 +67,7 @@ while True:
                 
             elif message.text == 'نحوه عملکرد ربات':
                 
-                about = '--- ربات با گرفتن شماره دانشجویی و کد ملی فروشنده ، به صورت خودکار کد فراموشی غذای رزرو شده را از سایت دریافت کرده و در صورت تایید در لیست کد ها قرار می‌دهد /\n--- پس از درخواست خریدار برای خرید کد ، کد فروشنده مجددا با سایت چک می‌شود و پس از دریافت شماره دانشجویی و کد ملی خریدار ، مبلغ غذا از حساب خریدار برداشته و به حساب فروشنده واریز می‌شود و کد برای خریدار فعال می‌شود /\n--- هزینه خرید کد رستوران مکمل ۱۰ هزار تومان و دریافتی فروش کد رستوران مکمل مبلغ ۶ هزار تومان است /\n--- در باقی سلف ها هزینه خرید و فروش برابر مبلغ غذا است /'
+                about = '--- ربات با گرفتن شماره دانشجویی و کد ملی فروشنده ، به صورت خودکار کد فراموشی غذای رزرو شده را از سایت دریافت کرده و در صورت تایید در لیست کد ها قرار می‌دهد /\n--- پس از درخواست خریدار برای خرید کد ، کد فروشنده مجددا با سایت چک می‌شود و پس از دریافت شماره دانشجویی و کد ملی خریدار ، مبلغ غذا از حساب خریدار برداشته و به حساب فروشنده واریز می‌شود و کد برای خریدار فعال می‌شود /\n--- هزینه خرید کد رستوران مکمل ۱۰ هزار تومان و دریافتی فروش کد رستوران مکمل مبلغ ۶ هزار تومان است /\n--- در باقی سلف ها هزینه خرید و فروش برابر مبلغ غذا است /\n--- Code: @mehdizhd11 \n--- Source: https://github.com/mehdizhd11/Beheshti-Self \n--- & Thanks to the friends who helped  ❤️'
                 
                 bot.send_message(message.chat.id, text=about)
                 
@@ -81,7 +77,7 @@ while True:
             
             else:
                 
-                bot.send_message(message.chat.id, '/restart')
+                bot.send_message(message.chat.id, '/restart') 
                 
                 return
                 
@@ -161,9 +157,7 @@ while True:
             
             else:
                 
-                bot.send_message(idNumberText.chat.id, 'خطا')
-                
-                bot.send_message(idNumberText.chat.id, 'اطلاعات ارسال شده خود و رزرو بودن غذا را بررسی و مجددا تلاش کنید')
+                bot.send_message(idNumberText.chat.id, 'خطا ! اطلاعات ارسال شده خود و رزرو بودن غذا را بررسی و مجددا تلاش کنید')
                 
                 bot.send_message(idNumberText.chat.id, '/restart')
                 
@@ -193,7 +187,7 @@ while True:
 
                 item8 = types.KeyboardButton('عباسپور کوی دختران')
 
-                item9 = types.KeyboardButton('رستوران مکمل رانشجویی')
+                item9 = types.KeyboardButton('رستوران مکمل دانشجویی')
 
                 markup.row(item1,item2)
                 
@@ -275,7 +269,7 @@ while True:
             
             if len(enableCodes) < 1:
                 
-                bot.send_message(buyer.chatId, 'در حال حاصر کدی برای این سلف موجود نیست')
+                bot.send_message(buyer.chatId, 'در حال حاضر کدی برای این سلف موجود نیست')
                 
                 bot.send_message(buyer.chatId, '/restart')
                 

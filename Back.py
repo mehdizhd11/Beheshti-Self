@@ -17,7 +17,7 @@ import schedule
 
 todayCodes = []
 
-PROXY = '37.32.12.86:27380'
+PROXY = '87.107.54.146:17280'
 
 chDrURL = '/Users/MeT/Code/Telegram Bot/Beheshti Self/chromedriver'
 
@@ -94,8 +94,6 @@ class Code:
     def clearList():
         
         todayCodes.clear()
-        
-        todayUsers.clear()
         
 class Seller:
     
@@ -488,31 +486,3 @@ class Buyer:
         self.isPayed = True
         
         return True
-    
-Users = []
-
-todayUsers = []
-
-todayReq = 0
-    
-def users_num(chatId):
-    
-    for idx in range(len(Users)):
-        
-        if chatId == Users[idx]:
-            
-            return
-        
-    Users.append(chatId)
-    
-def todayUsers_num(chatId):
-    
-    for idx in range(len(todayUsers)):
-        
-        if chatId == todayUsers[idx]:
-            
-            return
-    
-    todayUsers.append(chatId)
-    
-    print(chatId)
